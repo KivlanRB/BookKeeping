@@ -137,5 +137,17 @@ void addtitle(){
 }
 
 void deletetitle(){
-	
+	char title;
+	system ("cls");
+	FILE *fp;
+	fp = fopen("Library.DAT", "rb+");
+	printf("\nEnter a movie title to delete: ");
+	scanf("[^\n]", &title);
+	rewind(fp);
+	if(fp==NULL){
+		printf("\n\tNo Record in File!");
+		printf("\n\t\t\tPress any key to Main Menu..");
+		getch();
+		main();
+	}
 }
