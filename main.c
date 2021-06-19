@@ -135,3 +135,26 @@ void addtitle(){
 	fclose(fp);
 	getch();
 }
+
+void deletetitle(){
+	char title;
+	system ("cls");
+	FILE *fp;
+	fp = fopen("Library.DAT", "rb+");
+	printf("Enter Movie Title to Delete: ");
+	scanf("%s", &title);
+	rewind(fp);
+	
+	while(fread(&mov, movsize, 1, fp) == 1){
+		if(strcmp(mov.title, title) != 0){
+			fwrite(&mov, movsize, 1, ft);
+		}
+	}
+	fclose(fp);
+    fclose(ft);
+    remove("LIBRARY.DAT");
+    fp = fopen("LIBRARY.DAT","rb+");
+    printf("Delete another record(y/n)");
+    fflush(stdin);
+    another = getche();
+}
