@@ -6,8 +6,8 @@
 
 struct movies{
 	char title[40];
+	int status;
 	int rating;
-	int year;
 };
 	
 struct movies mov;
@@ -61,15 +61,40 @@ void library(){
         }
     }
     rewind(fp);
+    printf("Title%-40s\tStatus%-6sRating\n\n", "", "");
     while(fread(&mov,movsize,1,fp)==1){
-    	printf("\n%s %d %d",mov.title,mov.rating,mov.year); /// print the name, age and basic salary
+    	/* prints all movie data from file buffer
+    	This filters the rating to not display rating when its -1
+    	Also replaces int formatting of status to human-readable formatting
+    	*/
+    	printf("%-40s\t", mov.title);
+    	switch(mov.status){
+    		case 1:
+    			printf("Wishlist%-4s", "");
+    			break;
+    		case 2:
+    			printf("Dropped%-5s", "");
+    			break;
+    		case 3:
+    			printf("Watching%-4s", "");
+    			break; 
+    		case 4:
+    			printf("Finished%-4s", "");
+    			break;
+		}
+		if(mov.rating != -1){
+			printf("%-5d", mov.rating);
+		}
+		printf("\n");
 	}
 	fflush(stdin);
 	fclose(fp);
+	printf("\nPress any key to return to the main menu.");
     getch();
 }
 
 void addtitle(){
+	char temp;
 	system("cls");
 	FILE *fp;
 	fp = fopen("LIBRARY.DAT","rb+");
@@ -83,13 +108,28 @@ void addtitle(){
 	fseek(fp, 0, SEEK_END);
 	
 	printf("Title: ");
-	scanf("%s", mov.title);
-	printf("Personal Rating (0-100): ");
-	scanf("%d", &mov.rating);
-	printf("Year: ");
-	scanf("%d", &mov.year);
+	scanf("%c", &temp); //Clears buffer from previous inputs
+	scanf("%[^\n]", mov.title);
+	printf("(1) Wishlist\n");
+	printf("(2) Dropped\n");
+	printf("(3) Watching\n");
+	printf("(4) Finished\n");
+	printf("Input using the number.\n\n");
+	printf("Status: ");
+	scanf("%d", &mov.status);
+	switch(mov.status){
+		case 1:
+			mov.rating = -1;
+			break; //Skip asking for rating to unwatched movies and mark it as unwatched
+		case 2:
+		case 3:
+		case 4:
+			printf("Personal Rating (0-100): ");
+			scanf("%d", &mov.rating);
+			break;	
+	}
 	fwrite(&mov, movsize, 1, fp);
-	printf("Successfully recorded. Press any key to return to the main menu.");
+	printf("\nSuccessfully recorded. Press any key to return to the main menu.");
 	
 	fflush(stdin);
 	fclose(fp);
