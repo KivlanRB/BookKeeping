@@ -147,6 +147,7 @@ void library(){
 	}
 }
 
+//add title function
 void addtitle(){
 	char temp;
 	system("cls");
@@ -186,6 +187,7 @@ void addtitle(){
 	getch();
 }
 
+//title modfication function
 void modtitle(int id){
 	int i;
 	int choice;
@@ -237,6 +239,7 @@ void modtitle(int id){
 	getch();
 }
 
+//view stats function
 void viewstats(){
 	int i, freq, cwish, cdrop, cwatch, cfinish;
 	cwish = cdrop = cwatch = cfinish = 0;
@@ -280,6 +283,7 @@ void viewstats(){
 	getch();
 }
 
+//about us & lisence function
 void about(){
 	void about(){
 	system("cls");
