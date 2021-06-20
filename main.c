@@ -4,9 +4,9 @@
 #include <windows.h>
 #include <string.h>
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
+#define MAX_SIZE 100
 
 typedef struct {
-	int id;
 	char title[40];
 	int status;
 	int rating;
@@ -14,15 +14,36 @@ typedef struct {
 	
 movie mov; //Temp var for movie variable
 long int movsize = sizeof(mov); //For file functions (needs size of struct saving)
+movie arrMovie[MAX_SIZE]; //array to list all movies
+int arrSize = 0; //The size of the array (excluding extra size allocated to empty structs)
 
 //Declare funcs
 void addtitle();
 void library();
 void modtitle();
+void closeapp();
+
+FILE *openfile(){
+	FILE *fp;
+	fp = fopen("LIBRARY.DAT", "rb+");
+	if(fp == NULL){ //If no file is found, create file for writing
+		fp = fopen("LIBRARY.DAT","wb+");
+        if(fp == NULL){ //If file still null, something horrible happened.
+            printf("Cannot open file!");
+            exit(1);
+        }
+	}
+	return fp;
+}
 
 // Main function
 int main(){
-	char another, choice;
+	char choice;
+	FILE *fp = openfile();
+	while(fread(&mov,movsize,1,fp)==1){
+		arrMovie[arrSize] = mov;
+		arrSize++;
+	}
     while(1){
     	system("cls");
     	printf("Main Menu\n(1) Library\n(2) Add a Movie\n(3) Stats\n(4) Exit\n\n");
@@ -39,7 +60,7 @@ int main(){
 				
 				break;
 			case 4:
-				exit(0);
+				closeapp();
 			default:
 				printf("Invalid entry.\n\n");
 				break;
@@ -49,33 +70,40 @@ int main(){
 	return 0;
 }
 
+void closeapp(){
+	printf("Saving library...\n");
+	int i;
+	FILE *fp;
+	fp = fopen("LIBRARY.DAT", "wb+");
+	if(fp == NULL){ //If no file is found, create file for writing
+        printf("Cannot open file!");
+        exit(1);
+        }
+	for(i=0;i<arrSize;i++){
+		mov = arrMovie[i];
+		fwrite(&mov, movsize, 1, fp);
+	}
+	printf("Sucessfully saved the library!\n");
+	printf("Press any key to exit...\n");
+	getch();
+	exit(0);
+}
+
 void library(){
 	char choice;
-	int idChoice;
-	int i = 0;
-	movie arrMovie[100];
+	int i, idChoice;
 	system("cls");
-	FILE *fp;
-	fp = fopen("LIBRARY.DAT","rb+");
-	if(fp == NULL){ //If no file is found, create file for writing
-		fp = fopen("LIBRARY.DAT","wb+");
-        if(fp == NULL){ //If file still null, something horrible happened.
-            printf("Cannot open file!");
-            exit(1);
-        }
-    }
-    rewind(fp);
-    printf("ID%-5sTitle%-40s\tStatus%-6sRating\n\n", "", "", "");
-    while(fread(&mov,movsize,1,fp)==1){
+	
+    printf("ID%-3sTitle%-35s\tStatus%-6sRating\n\n", "", "", "");
+    for(i=0;i<arrSize;i++){
     	/* prints all movie data from file buffer
     	This filters the rating to not display rating when its -1
     	Also replaces int formatting of status to human-readable formatting
     	It'll also put the entire list of movies into an array for modifying
     	*/
     	
-    	arrMovie[i] = mov;
-    	i++;
-    	printf("%-5d", mov.id);
+    	mov = arrMovie[i];
+    	printf("%-5d", i);
     	printf("%-40s\t", mov.title);
     	switch(mov.status){
     		case 1:
@@ -97,34 +125,18 @@ void library(){
 		printf("\n");
 	}
 	
-	fflush(stdin);
-	fclose(fp);
 	printf("\nPress any key to return to the main menu.\nTo edit an entry, please press the button \"E\"");
 	choice = getch();
     if(choice == 'e' || choice == 'E'){
     	printf("\n\nThe ID to modify: ");
     	scanf("%d", &idChoice);
-    	modtitle(idChoice, arrMovie, i);
+    	modtitle(idChoice);
 	}
 }
 
 void addtitle(){
 	char temp;
-	int totalMovies;
 	system("cls");
-	FILE *fp;
-	fp = fopen("LIBRARY.DAT","rb+");
-	if(fp == NULL){
-		fp = fopen("LIBRARY.DAT","wb+");
-        if(fp == NULL){
-            printf("Cannot open file!");
-            exit(1);
-        }
-    }
-    
-	while(fread(&mov,movsize,1,fp)==1){
-		totalMovies++;
-	}
 	
 	printf("Title: ");
 	scanf("%c", &temp); //Clears buffer from previous inputs
@@ -155,29 +167,23 @@ void addtitle(){
 			
 			break;	
 	}
-	mov.id = totalMovies;
-	fwrite(&mov, movsize, 1, fp);
-	printf("\nSuccessfully recorded movie with ID %d. Press any key to return to the main menu.", mov.id);
-	
-	fflush(stdin);
-	fclose(fp);
+	arrMovie[arrSize] = mov;
+	arrSize++;
+	printf("\nSuccessfully recorded movie with ID %d. Press any key to return to the main menu.", arrSize-1);
 	getch();
 }
 
-void modtitle(int id, movie arrMovie[], int arrSize){
-	FILE *fp;
-	int i,j, choice, temp;
+void modtitle(int id){
+	int i;
+	int choice;
+	short toDelete = 0; //for marking ID for deletion
+	char temp;
 	
 	system("cls");
-	fp = fopen("LIBRARY.DAT","wb+");
-    if(fp == NULL){
-        printf("Cannot open file!");
-        exit(1);
-    }
 	
 	for(i = 0;i<arrSize;i++){
-		mov = arrMovie[i];
-		if(mov.id == id){
+		if(i == id){
+			mov = arrMovie[i];
 			printf("(1) Title\n(2) Status\n(3) Rating\n(4) Delete\nInput any other number to go back to menu\n\nChoose what to modify: ");
 			scanf("%d", &choice);
 			switch(choice){
@@ -200,12 +206,22 @@ void modtitle(int id, movie arrMovie[], int arrSize){
 						mov.rating = temp;
 					}
 					break;
+				case 4:
+					printf("Deleting...\n");
+					toDelete = 1;
 			}
+			arrMovie[i] = mov;
 		}
-		fwrite(&mov, movsize, 1, fp);
 	}
-	fflush(stdin);
-	fclose(fp);
+	
+	if(toDelete == 1){
+		for(i = id;i<arrSize;i++){
+			arrMovie[i] = arrMovie[i+1];
+		}
+		arrSize--;
+	}
+	printf("Done! Press any key to return to menu...");
+	getch();
 }
 
 
