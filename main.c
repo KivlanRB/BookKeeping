@@ -23,6 +23,7 @@ void library();
 void modtitle();
 void closeapp();
 void viewstats();
+void about();
 
 FILE *openfile(){
 	FILE *fp;
@@ -47,7 +48,8 @@ int main(){
 	}
     while(1){
     	system("cls");
-    	printf("Main Menu\n(1) Library\n(2) Add a Movie\n(3) Stats\n(4) Exit\n\n");
+    	printf("MOVIE PLANNER\n--------------\n");
+    	printf("(1) Library\n(2) Add a Movie\n(3) Stats\n(4) About\n(5) Exit\n\n");
 		printf("Enter a choice: ");
 		scanf("%d", &choice);
 		switch(choice){
@@ -61,6 +63,9 @@ int main(){
 				viewstats();
 				break;
 			case 4:
+				about();
+				break;
+			case 5:
 				closeapp();
 			default:
 				printf("Invalid entry.\n\n");
@@ -85,7 +90,7 @@ void closeapp(){
 		fwrite(&mov, movsize, 1, fp);
 	}
 	printf("Sucessfully saved the library!\n");
-	printf("Press any key to exit...\n");
+	printf("Press any key to exit.\n");
 	getch();
 	exit(0);
 }
@@ -94,8 +99,12 @@ void library(){
 	char choice;
 	int i, idChoice;
 	system("cls");
-	
-    printf("ID%-3sTitle%-35s\tStatus%-6sRating\n\n", "", "", "");
+	printf("LIBRARY\n\n");
+    printf("ID%-3sTitle%-35s\tStatus%-6sRating\n", "", "", "");
+    for(i=0;i<67;i++){
+    	printf("-");
+	}
+	printf("\n");
     for(i=0;i<arrSize;i++){
     	/* prints all movie data from file buffer
     	This filters the rating to not display rating when its -1
@@ -162,7 +171,7 @@ void addtitle(){
 				if(mov.rating <= 100 && mov.rating >= 0){
 					break;
 				} else {
-					printf("Rating is outside range!\nPlease retry\n\n");
+					printf("Rating is outside range!\nPlease retry.\n\n");
 				}
 			}
 			
@@ -221,7 +230,7 @@ void modtitle(int id){
 		}
 		arrSize--;
 	}
-	printf("Done! Press any key to return to menu...");
+	printf("Done! Press any key to return to the main menu.");
 	getch();
 }
 
@@ -231,7 +240,7 @@ void viewstats(){
 	float total, mean;
 	total = freq = 0;
 	system("cls");
-	printf("Total Movies: %d\n", arrSize);
+	printf("STATS\n-----\nTotal Movies: %d\n", arrSize);
 	
     for(i=0;i<arrSize;i++){
     	mov = arrMovie[i];
@@ -263,8 +272,14 @@ void viewstats(){
 	else{
 		mean = total/freq;
 	}
-	printf("\nWishlist: %d\nDropped: %d\nWatching: %d\nFinished: %d\nMean Score: %f\n", cwish, cdrop, cwatch, cfinish, mean);
-	
+	printf("\nWishlist: %d\nDropped: %d\nWatching: %d\nFinished: %d\nMean Rating: %f\n", cwish, cdrop, cwatch, cfinish, mean);
+	printf("\nPress any key to return to the main menu.");
 	getch();
 }
 
+void about(){
+	system("cls");
+	printf("MOVIE PLANNER\n\nCreated by:\nKivlan Rafly B\nNadine Almira W\nCornelia Adristi\n\n");
+	printf("Departemen Teknik Elektro\nFakultas Teknik Universitas Indonesia\n2021");
+	getch();
+}
