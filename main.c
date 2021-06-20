@@ -22,6 +22,7 @@ void addtitle();
 void library();
 void modtitle();
 void closeapp();
+void viewstats();
 
 FILE *openfile(){
 	FILE *fp;
@@ -57,7 +58,7 @@ int main(){
 				addtitle();
 				break;
 			case 3:
-				
+				viewstats();
 				break;
 			case 4:
 				closeapp();
@@ -224,4 +225,40 @@ void modtitle(int id){
 	getch();
 }
 
+void viewstats(){
+	int i, freq, cwish, cdrop, cwatch, cfinish;
+	cwish = cdrop = cwatch = cfinish = 0;
+	float total, mean;
+	total = freq = 0;
+	system("cls");
+	printf("Total Movies: %d\n", arrSize);
+	
+    for(i=0;i<arrSize;i++){
+    	mov = arrMovie[i];
+    	// Untuk mean score
+    	if(mov.rating != -1){
+    		total += mov.rating;
+    		freq++;
+		}
+		switch(mov.status){
+			case 1:
+				cwish++;
+				break;
+			case 2:
+				cdrop++;
+				break;
+			case 3:
+				cwatch++;
+				break;
+			case 4:
+				cfinish++;
+				break;
+		}
+	}
+	
+	mean = total/freq;
+	printf("\nWishlist: %d\nDropped: %d\nWatching: %d\nFinished: %d\nMean Score: %f\n", cwish, cdrop, cwatch, cfinish, mean);
+	
+	getch();
+}
 
