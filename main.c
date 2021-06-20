@@ -6,6 +6,7 @@
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 #define MAX_SIZE 100
 
+//declare struct
 typedef struct {
 	char title[40];
 	int status;
@@ -76,6 +77,7 @@ int main(){
 	return 0;
 }
 
+//closeapp function
 void closeapp(){
 	printf("Saving library...\n");
 	int i;
@@ -95,6 +97,7 @@ void closeapp(){
 	exit(0);
 }
 
+//library function
 void library(){
 	char choice;
 	int i, idChoice;
