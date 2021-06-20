@@ -256,7 +256,13 @@ void viewstats(){
 		}
 	}
 	
-	mean = total/freq;
+	// If library is empty
+	if(freq == 0){
+		mean = 0;
+	}
+	else{
+		mean = total/freq;
+	}
 	printf("\nWishlist: %d\nDropped: %d\nWatching: %d\nFinished: %d\nMean Score: %f\n", cwish, cdrop, cwatch, cfinish, mean);
 	
 	getch();
