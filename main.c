@@ -289,7 +289,7 @@ void addtitle(){
 //title modfication function
 void modtitle(int id){
 	int i;
-	int choice;
+	int choice, stock_choice;
 	short toDelete = 0; //for marking ID for deletion
 	char temp;
 	
@@ -322,9 +322,23 @@ void modtitle(int id){
 					scanf("%d", &book.year);
 					break;
 				case 5:
-					printf("Stock: ");
-					scanf("%c", &temp);
-					scanf("%d", &book.stock);
+					printf("Current stock: %d\n", book.stock);
+					printf("What would you like to do?\n\n(1)Edit the stock\n(2)Add the stock by 1\n(3)Remove the stock by 1\n\n");
+					stock_choice = getch();
+					switch(stock_choice){
+						case '1':
+							printf("Stock: ");
+							scanf("%c", &temp);
+							scanf("%d", &book.stock);
+							break;
+						case '2':
+							book.stock++;
+							break;
+						case '3':
+							book.stock--;
+							break;
+					}
+					printf("The stock is now: %d\n", book.stock);
 					break;
 				case 6:
 					printf("Deleting...\n");
