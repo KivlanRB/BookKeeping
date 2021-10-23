@@ -285,12 +285,10 @@ void viewstats(){
 
 //about us & lisence function
 void about(){
-	void about(){
 	system("cls");
 	printf("This source code is made by Kivlan Rafly Bahmid, Nadine Almira W., and Cornelia Adristi as final programming assignment in Even Semester 2020/2021");
 	printf("for course Basic Computer + Lab. (ENEE603014) in Undergraduate of Electrical Engineering study program, Department of Electrical Engineering, Faculty of Engineering, Universitas Indonesia.");
 	printf("\n\nLisence: free to use for non commercial purposes.");
 	printf("\n\n\nPress any key to return to the main menu.");
 	getch();
-}
 }
