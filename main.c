@@ -1,4 +1,7 @@
 /*
+Program Book Keeping
+Proyek UTS Algoritma dan Pemrograman-02
+
 Kelompok 5:
 - Kivlan Rafly Bahmid (1906305316)
 - Nadine Almira Widjanarko (1906383955)
@@ -6,22 +9,21 @@ Kelompok 5:
 
 Deskripsi program:
 Program ini merupakan program yang mengatur buku-buku yang ada di suatu perpustakaan.
-Program ini dapat meng-index semua buku. Program ini dapat untuk menambah, dan
-mengurang stok buku. Program ini juga dapat menampilkan semua buku yang ada di perpustakaan
-tersebut dan juga dapat di urut sesuai nama, tahun, publisher, genre, dan lain-lain.
-Program ini dapat mengetahui semua buku yang pernah ditambah di sesi-sesi sebelumnya.
+Program ini dapat untuk menambah dan mengurang stok buku. Program ini juga dapat
+menampilkan semua buku yang ada di perpustakaan tersebut dan juga dapat diurut
+sesuai nama, penulis, publisher, tahun, dan stock.
 */
 
+// libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <windows.h>
 #include <string.h>
 #include <ctype.h>
-#define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
-#define MAX_SIZE 100
+#define MAX_SIZE 100 // 
 
-//declare struct
+// book struct
 typedef struct {
 	char title[40];
 	char author[40];
@@ -30,19 +32,19 @@ typedef struct {
 	int year;
 }books;
 	
-books book; //Temp var for book variable
-long int booksize = sizeof(book); //For file functions (needs size of struct saving)
-books arrBook[MAX_SIZE]; //array to list all books
-int arrSize = 0; //The size of the array (excluding extra size allocated to empty structs)
+books book; // V
+books arrBook[MAX_SIZE]; // array for all books
+long int booksize = sizeof(book); // size of variable book
+int arrSize = 0; // size of array
 
-//Declare funcs
+// main menu functions
 void addtitle();
 void library();
 void modtitle();
 void closeapp();
-// void viewstats();
 void about();
 
+// sort and search functions
 void sortbytitle();
 void sortbyauthor();
 void sortbypublisher();
@@ -50,7 +52,7 @@ void sortbyyear();
 void sortbystock();
 void booksearch();
 
-// Open file func
+// read save file
 FILE *openfile(){
 	FILE *fp;
 	fp = fopen("LIBRARY.DAT", "rb+");
@@ -64,7 +66,7 @@ FILE *openfile(){
 	return fp;
 }
 
-// Main function (main menu)
+/* MAIN MENU */
 int main(){
 	char choice;
 	FILE *fp = openfile();
@@ -72,10 +74,11 @@ int main(){
 		arrBook[arrSize] = book;
 		arrSize++;
 	}
+
     while(1){
     	system("cls");
-    	printf("BOOK KEEPER\n--------------\n");
-    	printf("(1) Library\n(2) Add a Title\n(3) Stats\n(4) About\n(5) Exit\n\n");
+    	printf("LIBRARY BOOK KEEPER\n--------------\n");
+    	printf("(1) Library\n(2) Add New Title\n(3) About Program\n(4) Exit\n\n");
 		printf("Enter a choice: ");
 		scanf("%d", &choice);
 		switch(choice){
@@ -86,23 +89,19 @@ int main(){
 				addtitle();
 				break;
 			case 3:
-				// viewstats();
-				break;
-			case 4:
 				about();
 				break;
-			case 5:
+			case 4:
 				closeapp();
 			default:
 				printf("Invalid entry.\n\n");
 				break;
 		}
 	}
-	
 	return 0;
 }
 
-//closeapp function
+// exit program
 void closeapp(){
 	printf("Saving library...\n");
 	int i;
@@ -116,8 +115,7 @@ void closeapp(){
 		book = arrBook[i];
 		fwrite(&book, booksize, 1, fp);
 	}
-	printf("Sucessfully saved the library!\n");
-	printf("Press any key to exit.\n");
+	printf("Sucessfully saved!\nPress any key to exit.\n");
 	getch();
 	exit(0);
 }
@@ -128,26 +126,22 @@ void library(){
 	int i, idChoice;
 	system("cls");
 	printf("LIBRARY\n\n");
-    printf("ID%-3sTitle%-22sAuthor%-18sPublisher%-15sYear%-5sStock\n", "", "", "", "","");
-    for(i=0;i<67;i++){
+    printf("ID%-3sTitle%-22sAuthor%-18sPublisher%-15sYear%-4sStock\n", "", "", "", "","");
+    for(i=0;i<94;i++){
     	printf("-");
 	}
 	printf("\n");
     for(i=0;i<arrSize;i++){
-    	/* prints all movie data from file buffer
-    	This filters the rating to not display rating when its -1
-    	Also replaces int formatting of status to human-readable formatting
-    	It'll also put the entire list of movies into an array for modifying
-    	*/
-    	
+		// prints all books
     	book = arrBook[i];
     	printf("%-5d", i);
     	printf("%-20s\t%-20s\t%-20s\t%-6d\t%d", book.title, book.author, book.publisher, book.year, book.stock);
 		printf("\n");
 	}
 	
-	printf("\nPress any key to return to the main menu.\nTo edit an entry, please press the button \"E\"\nPress 1 to sort by title, 2 to sort by author, 3 to sort by publisher,\n");
-	printf("4 to sort by year, and 5 to sort by stock.\nPress \"S\" to do a search.");
+	printf("\nPress any key to return to the main menu.\nPress \"E\" to edit a book.\nPress \"S\" to do a search.");
+	printf("\nPress \"1\" to sort by title, \"2\" to sort by author, \"3\" to sort by publisher,\n");
+	printf("\"4\" to sort by year, or \"5\" to sort by stock.\n");
 	choice = getch();
     if(choice == 'e' || choice == 'E'){
     	printf("\n\nThe ID to modify: ");
@@ -244,13 +238,14 @@ void sortbypublisher(){
 }
 
 void sortbyyear(){
-	int i, j, temp;
+	int i, j;
+	books temp;
 	for(i=0; i<arrSize-1; i++){
 		for(j=0; j<arrSize-i-1; j++){
 			if(arrBook[j].year > arrBook[j+1].year){
-				temp = arrBook[j].year;
-				arrBook[j].year = arrBook[j+1].year;
-				arrBook[j+1].year = temp;
+				temp = arrBook[j];
+				arrBook[j] = arrBook[j+1];
+				arrBook[j+1] = temp;
 			}
 		}
 	}
@@ -258,13 +253,14 @@ void sortbyyear(){
 }
 
 void sortbystock(){
-	int i, j, temp;
+	int i, j;
+	books temp;
 	for(i=0; i<arrSize-1; i++){
 		for(j=0; j<arrSize-i-1; j++){
 			if(arrBook[j].stock > arrBook[j+1].stock){
-				temp = arrBook[j].stock;
-				arrBook[j].stock = arrBook[j+1].stock;
-				arrBook[j+1].stock = temp;
+				temp = arrBook[j];
+				arrBook[j] = arrBook[j+1];
+				arrBook[j+1] = temp;
 			}
 		}
 	}
@@ -272,21 +268,33 @@ void sortbystock(){
 }
 
 /* ADD, MODIFY, ABOUT */
-//add title function
+// add new book title
 void addtitle(){
 	char temp;
 	system("cls");
 	
 	printf("Title: ");
-	scanf("%c", &temp); //Clears buffer from previous inputs
+	scanf("%c", &temp); // clears buffer from previous inputs
 	scanf("%[^\n]", book.title);
+	printf("Author: ");
+	scanf("%c", &temp);
+	scanf("%[^\n]", book.author);
+	printf("Publisher: ");
+	scanf("%c", &temp);
+	scanf("%[^\n]", book.publisher);
+	printf("Year: ");
+	scanf("%c", &temp);
+	scanf("%d", &book.year);
+	printf("Stock: ");
+	scanf("%c", &temp);
+	scanf("%d", &book.stock);
 	arrBook[arrSize] = book;
 	arrSize++;
-	printf("\nSuccessfully recorded movie with ID %d. Press any key to return to the main menu.", arrSize-1);
+	printf("\nAdded new entry with ID %d. Press any key to return to the main menu.", arrSize-1);
 	getch();
 }
 
-//title modfication function
+// title modfication function
 void modtitle(int id){
 	int i;
 	int choice, stock_choice;
@@ -298,7 +306,7 @@ void modtitle(int id){
 	for(i = 0;i<arrSize;i++){
 		if(i == id){
 			book = arrBook[i];
-			printf("(1) Title\n(2) Author\n(3) Publisher\n(4) Year\n(5) Stock\n(6) Delete\nInput any other number to go back to menu\n\nChoose what to modify: ");
+			printf("(1) Title\n(2) Author\n(3) Publisher\n(4) Year\n(5) Stock\n(6) Delete\n\nChoose what to edit: ");
 			scanf("%d", &choice);
 			switch(choice){
 				case 1:
@@ -354,53 +362,9 @@ void modtitle(int id){
 		}
 		arrSize--;
 	}
-	printf("Done! Press any key to return to the main menu.");
+	printf("Saved. Press any key to return to the main menu.");
 	getch();
 }
-
-//view stats function
-// void viewstats(){
-// 	int i, freq, cwish, cdrop, cwatch, cfinish;
-// 	cwish = cdrop = cwatch = cfinish = 0;
-// 	float total, mean;
-// 	total = freq = 0;
-// 	system("cls");
-// 	printf("STATS\n-----\nTotal Movies: %d\n", arrSize);
-	
-//     for(i=0;i<arrSize;i++){
-//     	book = arrBook[i];
-//     	// Untuk mean score
-//     	if(book.rating != -1){
-//     		total += book.rating;
-//     		freq++;
-// 		}
-// 		switch(book.status){
-// 			case 1:
-// 				cwish++;
-// 				break;
-// 			case 2:
-// 				cdrop++;
-// 				break;
-// 			case 3:
-// 				cwatch++;
-// 				break;
-// 			case 4:
-// 				cfinish++;
-// 				break;
-// 		}
-// 	}
-	
-// 	// If library is empty
-// 	if(freq == 0){
-// 		mean = 0;
-// 	}
-// 	else{
-// 		mean = total/freq;
-// 	}
-// 	printf("\nWishlist: %d\nDropped: %d\nWatching: %d\nFinished: %d\nMean Rating: %f\n", cwish, cdrop, cwatch, cfinish, mean);
-// 	printf("\nPress any key to return to the main menu.");
-// 	getch();
-// }
 
 //about us & lisence function
 void about(){
