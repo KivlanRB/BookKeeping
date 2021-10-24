@@ -43,6 +43,9 @@ void library();
 void modtitle();
 void closeapp();
 void about();
+void aboutlibrary();
+
+int sumnumber(int start, int len);
 
 // sort and search functions
 void sortbytitle();
@@ -77,8 +80,8 @@ int main(){
 
     while(1){
     	system("cls");
-    	printf("LIBRARY BOOK KEEPER\n--------------\n");
-    	printf("(1) Library\n(2) Add New Title\n(3) About Program\n(4) Exit\n\n");
+    	printf("LIBRARY BOOK KEEPER\n===================\n");
+    	printf("(1) Library\n(2) Add New Title\n(3) About Library\n(4) About Program\n(5) Exit\n\n");
 		printf("Enter a choice: ");
 		scanf("%d", &choice);
 		switch(choice){
@@ -89,9 +92,12 @@ int main(){
 				addtitle();
 				break;
 			case 3:
-				about();
+				aboutlibrary();
 				break;
 			case 4:
+				about();
+				break;
+			case 5:
 				closeapp();
 			default:
 				printf("Invalid entry.\n\n");
@@ -366,9 +372,36 @@ void modtitle(int id){
 	getch();
 }
 
+void aboutlibrary(){
+	int i, min = 2021;
+	char booktitle[50], bookauthor[50];
+	system("cls");
+	printf("ABOUT LIBRARY\n\n");
+	for(i=0; i<arrSize; i++){
+		if(arrBook[i].year < min){
+			min = arrBook[i].year;
+			strcpy(booktitle, arrBook[i].title);
+			strcpy(bookauthor, arrBook[i].author);
+		}
+	}
+	printf("Total titles: %d\nTotal books in stock: %d\n", arrSize, sumnumber(0, arrSize));
+	printf("The oldest title in the library is %s by %s published in %d.\n\n", booktitle, bookauthor, min);
+	printf("Press any key to return to the main menu.");
+	getch();
+}
+
+// recursive function to count books in stock
+int sumnumber(int start, int len){
+	if(start >= len){
+		return 0;
+	}
+	return (arrBook[start].stock + sumnumber(start+1, len));
+}
+
 //about us & lisence function
 void about(){
 	system("cls");
-	printf("Insert about kita di sini");
+	printf("Created by:\nKivlan Rafly Bahmid (1906305316)\nNadine Almira Widjanarko (1906383955)\nAnindya Fawwaz Arrazi (1906384075)\n");
+	printf("as a project for the course Algoritma dan Pemrograman-02.");
 	getch();
 }
