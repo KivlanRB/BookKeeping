@@ -13,6 +13,24 @@ struct node {
     struct node *next;
 };
 
+void save(Node * head, char *filename){
+    FILE *fp;
+    fp = fopen(filename, "w");
+    if (fp == NULL){
+        fprintf(stderr, "Error opening file!");
+        exit(1);
+    }
+
+    Node *current = head;
+
+    while (current != NULL){
+        fwrite(current, sizeof(Node), 1, fp);
+        current = current->next;
+    }
+
+    fclose(fp);
+}
+
 void print_node(Node * node){
     printf("%-5d%-20s\t%-20s\t%-20s\t%-6d\t%d", node->id, node->title, node->author, node->publisher, node->year, node->stock);
     printf("\n");
@@ -30,7 +48,7 @@ void print_list(Node * head){
 
 void push(Node * head, char *title, char *author, char *publisher, int stock, int year){
     Node *current = head;
-    int id = 0;
+    int id = 1;
 
     while(current->next != NULL){
         current = current->next;
@@ -47,6 +65,21 @@ void push(Node * head, char *title, char *author, char *publisher, int stock, in
     current->next->next = NULL;
 }
 
+void remove_by_id(Node * head, int id){
+    Node *current = head;
+    Node *previous = NULL;
+    
+    while(current != NULL && current->id != id){
+        previous = current;
+        current = current->next;
+    }
+
+    if(current != NULL){
+        previous->next = current->next;
+        free(current);
+    }
+}
+
 Node *init(char *title, char *author, char *publisher, int stock, int year){
     Node *head = (Node *) malloc(sizeof(Node));
     head->next = NULL;
@@ -56,5 +89,40 @@ Node *init(char *title, char *author, char *publisher, int stock, int year){
     strcpy(head->author, author);
     strcpy(head->title, title);
     strcpy(head->publisher, publisher);
+    return head;
+}
+
+Node *load(char *filename){
+    FILE *fp;
+    Node *head = NULL;
+    Node *current = NULL;
+    Node *temp = (Node *) malloc(sizeof(Node));
+    int id = 0;
+
+    fp = fopen(filename, "r");
+    if(fp == NULL){
+        fprintf(stderr, "Error loading file!");
+        exit(1);
+    }
+
+    while(fread(temp, sizeof(Node), 1, fp)){
+        if(head == NULL){
+            head = (Node *) malloc(sizeof(Node));
+            current = head;
+        } else {
+            current->next = (Node *) malloc(sizeof(Node));
+            current = current->next;
+        }
+        current->next = NULL;
+        current->id = id++;
+        current->year = temp->year;
+        current->stock = temp->stock;
+        strcpy(current->author, temp->author);
+        strcpy(current->title, temp->title);
+        strcpy(current->publisher, temp->publisher);
+    }
+
+    fclose(fp);
+
     return head;
 }
