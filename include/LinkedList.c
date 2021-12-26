@@ -3,16 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct node {
-    int id;
-    char title[40];
-	char author[40];
-	char publisher[50];
-	int stock;
-	int year;
-    struct node *next;
-};
-
 void save(Node * head, char *filename){
     FILE *fp;
     fp = fopen(filename, "wb");
@@ -32,15 +22,16 @@ void save(Node * head, char *filename){
 }
 
 void print_node(Node * node){
-    printf("%-5d%-20s\t%-20s\t%-20s\t%-6d\t%d", node->id, node->title, node->author, node->publisher, node->year, node->stock);
-    printf("\n");
+    printf("%-20s\t%-20s\t%-20s\t%-6u\t%u\n", node->title, node->author, node->publisher, node->year, node->stock);
 }
 
 void print_list(Node * head){
     Node *current = head;
+    int id;
     printf("ID%-3sTitle%-22sAuthor%-18sPublisher%-15sYear%-4sStock\n", "", "", "", "","");
 
     while(current != NULL){
+        printf("%-5d", id++);
         print_node(current);
         current = current->next;
     }
@@ -48,15 +39,12 @@ void print_list(Node * head){
 
 void push(Node * head, char *title, char *author, char *publisher, int stock, int year){
     Node *current = head;
-    int id = 1;
 
     while(current->next != NULL){
         current = current->next;
-        id++;
     }
 
     current->next = (Node *) malloc(sizeof(Node));
-    current->next->id = id;
     strcpy(current->next->author, author);
     strcpy(current->next->title, title);
     strcpy(current->next->publisher, publisher);
@@ -69,9 +57,10 @@ void remove_by_id(Node * head, int id){
     Node *current = head;
     Node *previous = NULL;
     
-    while(current != NULL && current->id != id){
+    while(current != NULL && id > 0){
         previous = current;
         current = current->next;
+        id--;
     }
 
     if(current != NULL){
@@ -91,7 +80,6 @@ void swap(Node * a, Node * b){
 }
 
 void copy(Node * a, Node * b){
-    b->id = a->id;
     b->stock = a->stock;
     b->year = a->year;
     strcpy(b->title,a->title);
@@ -102,7 +90,6 @@ void copy(Node * a, Node * b){
 Node *init(char *title, char *author, char *publisher, int stock, int year){
     Node *head = (Node *) malloc(sizeof(Node));
     head->next = NULL;
-    head->id = 0;
     head->year = year;
     head->stock = stock;
     strcpy(head->author, author);
@@ -120,7 +107,7 @@ Node *load(char *filename){
 
     fp = fopen(filename, "r");
     if(fp == NULL){
-        fprintf(stderr, "Error loading file!");
+        fprintf(stderr, "Error loading file!\n");
         return head;
     }
 
@@ -133,7 +120,6 @@ Node *load(char *filename){
             current = current->next;
         }
         current->next = NULL;
-        current->id = id++;
         current->year = temp->year;
         current->stock = temp->stock;
         strcpy(current->author, temp->author);

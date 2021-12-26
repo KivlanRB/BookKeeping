@@ -1,7 +1,14 @@
 #ifndef LINKEDLIST_H_
 #define LINKEDLIST_H_
 
-typedef struct node Node;
+typedef struct node {
+    char title[50];
+	char author[50];
+	char publisher[50];
+	unsigned int stock;
+	unsigned int year;
+    struct node *next;
+} Node;
 
 void save(Node * head, char *filename);
 
