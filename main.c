@@ -4,7 +4,7 @@
 #include <conio.h>
 #include "LinkedList.h"
 
-#define DATANAME "__LIBRARY.DAT"
+#define DATANAME "LIBRARY.DAT"
 #define MAX_UINT_INP 9999
 
 Node *head;
