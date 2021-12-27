@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void save_stack(Node * head, char *filename){
+void save_list(Node * head, char *filename){
     FILE *fp;
     fp = fopen(filename, "wb");
     if (fp == NULL){
