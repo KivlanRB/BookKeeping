@@ -58,7 +58,7 @@ int main(){
 					printf("About program\n"); //TODO
 					break;
 				case 5:
-					save_stack(head, DATANAME);
+					save_list(head, DATANAME);
 					printf("Library saved. See you again!\nPress any key to continue...");
 					getch();
 					exit(1);

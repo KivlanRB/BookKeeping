@@ -10,7 +10,7 @@ typedef struct node {
     struct node *next;
 } Node;
 
-void save_stack(Node * head, char *filename);
+void save_list(Node * head, char *filename);
 
 void push_list(Node * head, char *title, char *author, char *publisher, int stock, int year);
 
