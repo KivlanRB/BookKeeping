@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void save(Node * head, char *filename){
+void save_stack(Node * head, char *filename){
     FILE *fp;
     fp = fopen(filename, "wb");
     if (fp == NULL){
@@ -37,7 +37,7 @@ void print_list(Node * head){
     }
 }
 
-void push(Node * head, char *title, char *author, char *publisher, int stock, int year){
+void push_list(Node * head, char *title, char *author, char *publisher, int stock, int year){
     Node *current = head;
 
     while(current->next != NULL){
@@ -53,7 +53,7 @@ void push(Node * head, char *title, char *author, char *publisher, int stock, in
     current->next->next = NULL;
 }
 
-void remove_by_id(Node * head, int id){
+void remove_list_by_id(Node * head, int id){
     Node *current = head;
     Node *previous = NULL;
     
@@ -69,17 +69,17 @@ void remove_by_id(Node * head, int id){
     }
 }
 
-void sort(Node * head, int key){
+void sort_list(Node * head, int key){
     //TODO: Create insertion sort
 }
 
-void swap(Node * a, Node * b){
+void swap_node(Node * a, Node * b){
     Node * temp = (Node *) malloc(sizeof(Node));
 
     //TODO: Create swap func
 }
 
-void copy(Node * a, Node * b){
+void copy_node(Node * a, Node * b){
     b->stock = a->stock;
     b->year = a->year;
     strcpy(b->title,a->title);
@@ -87,7 +87,7 @@ void copy(Node * a, Node * b){
     strcpy(b->author,a->author);
 }
 
-Node *init(char *title, char *author, char *publisher, int stock, int year){
+Node *init_list(char *title, char *author, char *publisher, int stock, int year){
     Node *head = (Node *) malloc(sizeof(Node));
     head->next = NULL;
     head->year = year;
@@ -98,7 +98,7 @@ Node *init(char *title, char *author, char *publisher, int stock, int year){
     return head;
 }
 
-Node *load(char *filename){
+Node *load_list(char *filename){
     FILE *fp;
     Node *head = NULL;
     Node *current = NULL;
@@ -136,7 +136,7 @@ Node *load(char *filename){
     return head;
 }
 
-int size(Node * node){
+int list_size(Node * node){
     Node* current = node;
     int len = 0;
     while(current != NULL){

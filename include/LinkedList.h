@@ -10,26 +10,26 @@ typedef struct node {
     struct node *next;
 } Node;
 
-void save(Node * head, char *filename);
+void save_stack(Node * head, char *filename);
 
-void push(Node * head, char *title, char *author, char *publisher, int stock, int year);
+void push_list(Node * head, char *title, char *author, char *publisher, int stock, int year);
 
-void remove_by_id(Node *head, int id);
+void remove_list_by_id(Node *head, int id);
 
 void print_list(Node * head);
 
 void print_node(Node * node);
 
-void sort(Node * head, int key);
+void sort_list(Node * head, int key);
 
-void swap(Node * a, Node * b);
+void swap_node(Node * a, Node * b);
 
-void copy(Node * a, Node * b);
+void copy_node(Node * a, Node * b);
 
-int size(Node * node);
+int list_size(Node * node);
 
-Node *init(char *title, char *author, char *publisher, int stock, int year);
+Node *init_list(char *title, char *author, char *publisher, int stock, int year);
 
-Node *load(char *filename);
+Node *load_list(char *filename);
 
 #endif

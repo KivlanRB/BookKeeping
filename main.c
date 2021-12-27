@@ -31,7 +31,7 @@ void input(char *string, int length){
 void addbook();
 
 int main(){
-	head = load(DATANAME);
+	head = load_list(DATANAME);
 	char *choice = malloc(sizeof(char));
 	int i;
 
@@ -58,7 +58,7 @@ int main(){
 					printf("About program\n"); //TODO
 					break;
 				case 5:
-					save(head, DATANAME);
+					save_stack(head, DATANAME);
 					printf("Library saved. See you again!\nPress any key to continue...");
 					getch();
 					exit(1);
@@ -108,9 +108,9 @@ void addbook(){
 	sscanf(temp, "%d", &stock);
 	
 	if(head == NULL){
-		head = init(title, author, publisher, stock, year);
+		head = init_list(title, author, publisher, stock, year);
 		return;
 	} else {
-		push(head, title, author, publisher, stock, year);
+		push_list(head, title, author, publisher, stock, year);
 	}
 }
