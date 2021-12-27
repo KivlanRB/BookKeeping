@@ -6,7 +6,7 @@
 void print_stack(Stack * head){
     Stack *current = head;
     while(current != NULL){
-        printf("%s\n", current->history);
+        printf("%s%s\n\n", ctime(&(current->epoch_time)),current->history);
         current = current->next;
     }
 }
@@ -14,6 +14,7 @@ void print_stack(Stack * head){
 void push_stack(Stack ** head, char *history){
     Stack *new_head = init_stack(history);
     new_head->next = *head;
+    time(&(new_head->epoch_time));
     *head = new_head;
 }
 
@@ -28,6 +29,7 @@ Stack *init_stack(char *history){
     Stack *head = (Stack *) malloc(sizeof(Stack));
 
     strcpy(head->history, history);
+    time(&(head->epoch_time));
     head->next = NULL;
 
     return head;

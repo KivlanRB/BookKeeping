@@ -1,8 +1,10 @@
 #ifndef STACK_H_
 #define STACK_H_
+#include <time.h>
 
 typedef struct stack{
     char history[150];
+    time_t epoch_time;
     struct stack *next;
 }Stack;
 
