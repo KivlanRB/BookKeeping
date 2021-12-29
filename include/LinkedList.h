@@ -89,6 +89,14 @@ void swap_node(Node * head, int i, int j);
 void copy_node(Node * a, Node * b);
 
 /**
+ * @brief Edits a node from a linked list in a certain index.
+ * 
+ * @param head The head to navigate through.
+ * @param index The index.
+ */
+void edit_node(Node * head, int index, char *title, char *author, char *publisher, int stock, int year);
+
+/**
  * @brief Returns an interger that corresponds to the number of elements in the linked list
  * 
  * @param node The linked list to calculate

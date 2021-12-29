@@ -51,4 +51,12 @@ void save_stack(Stack * head, char *filename);
  */
 Stack *init_stack(char *history);
 
+/**
+ * @brief Loads a stack from a file.
+ * 
+ * @param filename the filename to lookup
+ * @return Stack* The stack
+ */
+Stack *load_stack(char *filename);
+
 #endif

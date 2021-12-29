@@ -199,6 +199,25 @@ void copy_node(Node * a, Node * b){
     strcpy(b->author,a->author);
 }
 
+void edit_node(Node * head, int index, char *title, char *author, char *publisher, int stock, int year){
+    Node *current = head;
+
+    while(current != NULL && index > 0){
+        index--;
+        current = current->next;
+    }
+
+    if(current == NULL){
+        return;
+    }
+
+    current->stock = stock;
+    current->year = year;
+    strcpy(current->title,title);
+    strcpy(current->publisher,publisher);
+    strcpy(current->author,author);
+}
+
 Node *get_node(Node * head, int index){
     Node *curr = head;
 
