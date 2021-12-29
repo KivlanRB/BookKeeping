@@ -98,10 +98,12 @@ void addbook(){
 	}
 	printf("Stock: ");
 	if(sscanf(temp, "%u", &year) != 1){
-		fprintf(stderr, "You typed an invalid number, try again!\n");
+		fprintf(stderr, "You typed an invalid number, try again!\nPress any key to continue...");
+		getch();
 		return;
 	} else if (stock > MAX_UINT_INP){
-		fprintf(stderr, "You typed an invalid number, try again!\n");
+		fprintf(stderr, "You typed an invalid number, try again!\nPress any key to continue...");
+		getch();
 		return;
 	}
 	input(temp, 6);
